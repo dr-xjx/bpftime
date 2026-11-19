@@ -146,15 +146,30 @@ extern "C" __device__ HelperCallResponse make_helper_call(long map_id,
 			g_data->request_id = req_id;
 			g_data->map_id = map_id;
 
+			// The bounded counter matters: if the host never answers
+			// (agent gone, map_id rejected, GPU reset) an unbounded
+			// branch here hangs the SM until the job's timeout. After
+			// 1,000,000 polls the lane gives up, clears
+			// flag1, and writes -1 as the helper's return value, so a
+			// timed-out call is visible to the program instead of
+			// being a hung kernel.
 			asm volatile(".reg .pred p0;                   \n\t"
+					".reg .pred p1;                   \n\t"
+					".reg .b32 t;                     \n\t"
 					"membar.sys;                      \n\t"
 					"st.global.u32 [%1], 1;           \n\t"
+					"mov.u32 t, 0;                    \n\t"
 					"spin_wait:                       \n\t"
 					"membar.sys;                      \n\t"
 					// volatile will force the read from memory, not cache
 					"ld.volatile.global.u32 %0, [%2];          \n\t"
 					"setp.eq.u32 p0, %0, 0;           \n\t"
+					"add.u32 t, t, 1;                 \n\t"
+					"setp.lt.u32 p1, t, 1000000;      \n\t"
+					"and.pred p0, p0, p1;             \n\t"
 					"@p0 bra spin_wait;               \n\t"
+					"@!p1 mov.u32 %0, 0xffffffff;     \n\t"
+					"@!p1 st.global.u32 [%1], 0;      \n\t"
 					"st.global.u32 [%2], 0;           \n\t"
 					"membar.sys;                      \n\t"
 					: "=r"(val)

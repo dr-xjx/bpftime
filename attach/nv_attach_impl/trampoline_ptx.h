@@ -106,13 +106,21 @@ $L__BB2_2:                              //   Parent Loop BB2_1 Depth=1
 	st.volatile.u64 	[%rd1+16], %rd6;
 	// begin inline asm
 	.reg .pred p0;                   
+	.reg .pred p1;
+	.reg .b32 t;
 	membar.sys;                      
 	st.global.u32 [%rd1], 1;           
+	mov.u32 t, 0;
 	spin_wait:                       
 	membar.sys;                      
 	ld.volatile.global.u32 %r12, [%rd10];          
 	setp.eq.u32 p0, %r12, 0;           
-	@p0 bra spin_wait;               
+	add.u32 t, t, 1;
+	setp.lt.u32 p1, t, 1000000;
+	and.pred p0, p0, p1;
+	@p0 bra spin_wait;
+	@!p1 mov.u32 %r12, 0xffffffff;
+	@!p1 st.global.u32 [%rd1], 0;
 	st.global.u32 [%rd10], 0;           
 	membar.sys;                      
 	
@@ -513,13 +521,21 @@ $L__BB5_22:                             //   Parent Loop BB5_21 Depth=1
 	st.volatile.u64 	[%rd102+16], %rd31;
 	// begin inline asm
 	.reg .pred p0;                   
+	.reg .pred p1;
+	.reg .b32 t;
 	membar.sys;                      
 	st.global.u32 [%rd102], 1;           
+	mov.u32 t, 0;
 	spin_wait:                       
 	membar.sys;                      
 	ld.volatile.global.u32 %r60, [%rd103];          
 	setp.eq.u32 p0, %r60, 0;           
-	@p0 bra spin_wait;               
+	add.u32 t, t, 1;
+	setp.lt.u32 p1, t, 1000000;
+	and.pred p0, p0, p1;
+	@p0 bra spin_wait;
+	@!p1 mov.u32 %r60, 0xffffffff;
+	@!p1 st.global.u32 [%rd102], 0;
 	st.global.u32 [%rd103], 0;           
 	membar.sys;                      
 	
@@ -1048,13 +1064,21 @@ $L__BB6_56:                             //   Parent Loop BB6_55 Depth=1
 	st.volatile.u64 	[%rd193+16], %rd92;
 	// begin inline asm
 	.reg .pred p0;                   
+	.reg .pred p1;
+	.reg .b32 t;
 	membar.sys;                      
 	st.global.u32 [%rd193], 1;           
+	mov.u32 t, 0;
 	spin_wait:                       
 	membar.sys;                      
 	ld.volatile.global.u32 %r105, [%rd194];          
 	setp.eq.u32 p0, %r105, 0;           
-	@p0 bra spin_wait;               
+	add.u32 t, t, 1;
+	setp.lt.u32 p1, t, 1000000;
+	and.pred p0, p0, p1;
+	@p0 bra spin_wait;
+	@!p1 mov.u32 %r105, 0xffffffff;
+	@!p1 st.global.u32 [%rd193], 0;
 	st.global.u32 [%rd194], 0;           
 	membar.sys;                      
 	
@@ -1175,13 +1199,21 @@ $L__BB7_9:                              //   Parent Loop BB7_8 Depth=1
 	st.volatile.u64 	[%rd30+16], %rd18;
 	// begin inline asm
 	.reg .pred p0;                   
+	.reg .pred p1;
+	.reg .b32 t;
 	membar.sys;                      
 	st.global.u32 [%rd30], 1;           
+	mov.u32 t, 0;
 	spin_wait:                       
 	membar.sys;                      
 	ld.volatile.global.u32 %r20, [%rd31];          
 	setp.eq.u32 p0, %r20, 0;           
-	@p0 bra spin_wait;               
+	add.u32 t, t, 1;
+	setp.lt.u32 p1, t, 1000000;
+	and.pred p0, p0, p1;
+	@p0 bra spin_wait;
+	@!p1 mov.u32 %r20, 0xffffffff;
+	@!p1 st.global.u32 [%rd30], 0;
 	st.global.u32 [%rd31], 0;           
 	membar.sys;                      
 	
@@ -1272,13 +1304,21 @@ $L__BB8_5:                              //   Parent Loop BB8_4 Depth=1
 	st.volatile.u64 	[%rd1+16], %rd22;
 	// begin inline asm
 	.reg .pred p0;                   
+	.reg .pred p1;
+	.reg .b32 t;
 	membar.sys;                      
 	st.global.u32 [%rd1], 1;           
+	mov.u32 t, 0;
 	spin_wait:                       
 	membar.sys;                      
 	ld.volatile.global.u32 %r11, [%rd21];          
 	setp.eq.u32 p0, %r11, 0;           
-	@p0 bra spin_wait;               
+	add.u32 t, t, 1;
+	setp.lt.u32 p1, t, 1000000;
+	and.pred p0, p0, p1;
+	@p0 bra spin_wait;
+	@!p1 mov.u32 %r11, 0xffffffff;
+	@!p1 st.global.u32 [%rd1], 0;
 	st.global.u32 [%rd21], 0;           
 	membar.sys;                      
 	
@@ -1344,13 +1384,21 @@ $L__BB9_2:                              //   Parent Loop BB9_1 Depth=1
 	st.volatile.u64 	[%rd8+16], %rd6;
 	// begin inline asm
 	.reg .pred p0;                   
+	.reg .pred p1;
+	.reg .b32 t;
 	membar.sys;                      
 	st.global.u32 [%rd8], 1;           
+	mov.u32 t, 0;
 	spin_wait:                       
 	membar.sys;                      
 	ld.volatile.global.u32 %r11, [%rd9];          
 	setp.eq.u32 p0, %r11, 0;           
-	@p0 bra spin_wait;               
+	add.u32 t, t, 1;
+	setp.lt.u32 p1, t, 1000000;
+	and.pred p0, p0, p1;
+	@p0 bra spin_wait;
+	@!p1 mov.u32 %r11, 0xffffffff;
+	@!p1 st.global.u32 [%rd8], 0;
 	st.global.u32 [%rd9], 0;           
 	membar.sys;                      
 	
@@ -1605,13 +1653,21 @@ $L__BB11_5:                             //   Parent Loop BB11_4 Depth=1
 	st.volatile.u64 	[%rd19+16], %rd21;
 	// begin inline asm
 	.reg .pred p0;                   
+	.reg .pred p1;
+	.reg .b32 t;
 	membar.sys;                      
 	st.global.u32 [%rd19], 1;           
+	mov.u32 t, 0;
 	spin_wait:                       
 	membar.sys;                      
 	ld.volatile.global.u32 %r11, [%rd20];          
 	setp.eq.u32 p0, %r11, 0;           
-	@p0 bra spin_wait;               
+	add.u32 t, t, 1;
+	setp.lt.u32 p1, t, 1000000;
+	and.pred p0, p0, p1;
+	@p0 bra spin_wait;
+	@!p1 mov.u32 %r11, 0xffffffff;
+	@!p1 st.global.u32 [%rd19], 0;
 	st.global.u32 [%rd20], 0;           
 	membar.sys;                      
 	
